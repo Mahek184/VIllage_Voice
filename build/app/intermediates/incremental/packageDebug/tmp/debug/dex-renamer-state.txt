@@ -1,0 +1,4 @@
+#Tue Oct 01 10:08:12 IST 2024
+base.0=F\:\\flutter\\village_voice\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
