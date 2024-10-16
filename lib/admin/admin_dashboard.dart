@@ -6,6 +6,7 @@ import 'package:village_voice/notification_screen.dart'; // Import the Notificat
 import 'package:village_voice/admin/admin_event_schedule.dart'; // Import the EventScheduleScreen
 import 'package:village_voice/gallery_screen.dart'; // Import the GalleryScreen
 import 'package:village_voice/admin/admin_emergency_list.dart'; // Import the EmergencyListScreen
+import 'package:village_voice/admin/admin_health_tips_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
   @override
@@ -96,7 +97,7 @@ class AdminDashboard extends StatelessWidget {
                   context,
                   'assets/health tips.png',
                   'Health Tips',
-                  HealthTipsScreen(), // Navigate to HealthTipsScreen
+                  AdminHealthTipsScreen(), // Navigate to HealthTipsScreen
                 ),
                 _buildDashboardItem(
                   context,

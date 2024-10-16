@@ -18,6 +18,7 @@ class _StudentProfileScreenState extends State<AdminProfileScreen> {
   String dob = '01/01/2000';
   String contactNo = '9876543210';
   String gender = 'Male';
+  String selectedLanguage = 'English'; // Default language
 
   // Image-related variables
   File? _profileImage;
@@ -102,13 +103,14 @@ class _StudentProfileScreenState extends State<AdminProfileScreen> {
                 const SizedBox(height: 20),
 
                 // Personal Details Section
-                // buildSectionTitle('PERSONAL DETAILS'),
-                
-                // Each field on its own line
                 buildDetailsRow('Name', nameController),
                 buildDetailsRow('Email', emailController),
                 buildDetailsRow('Date Of Birth', dobController),
                 buildDetailsRow('Gender', genderController),
+
+                // Languages section
+                const SizedBox(height: 20),
+                buildLanguageDropdown(),
 
                 const SizedBox(height: 40),
 
@@ -205,13 +207,57 @@ class _StudentProfileScreenState extends State<AdminProfileScreen> {
             label,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color.fromARGB(255, 255, 255, 255),
             ),
           ),
           const SizedBox(height: 8), // Space between label and TextField
           TextField(
             controller: controller,
             readOnly: !isEditing,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color(0xFF6EABC6), // Updated border color
+                ),
+              ),
+              border: const OutlineInputBorder(),
+              fillColor: const Color(0xFF153448),
+              filled: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Build a dropdown for selecting language
+  Widget buildLanguageDropdown() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Languages',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 8), // Space between label and dropdown
+          DropdownButtonFormField<String>(
+            value: selectedLanguage,
+            items: ['English', 'Hindi', 'Gujarati'].map((String language) {
+              return DropdownMenuItem<String>(
+                value: language,
+                child: Text(language),
+              );
+            }).toList(),
+            onChanged: isEditing ? (String? newValue) {
+              setState(() {
+                selectedLanguage = newValue!;
+              });
+            } : null, // Disable dropdown if not editing
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(

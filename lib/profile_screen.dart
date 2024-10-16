@@ -18,6 +18,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
   String dob = '01/01/2000';
   String contactNo = '9876543210';
   String gender = 'Male';
+  String selectedLanguage = 'English'; // Default language
 
   // Image-related variables
   File? _profileImage;
@@ -110,6 +111,52 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 buildDetailsRow('Date Of Birth', dobController),
                 buildDetailsRow('Gender', genderController),
 
+                // Languages Section (Dropdown)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Languages',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 8), // Space between label and dropdown
+                      DropdownButtonFormField<String>(
+                        value: selectedLanguage,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF6EABC6), // Updated border color
+                            ),
+                          ),
+                          fillColor: const Color(0xFF153448),
+                          filled: true,
+                        ),
+                        dropdownColor: const Color(0xFF3C5B6F), // Dropdown background color
+                        onChanged: isEditing ? (String? newValue) {
+                          setState(() {
+                            selectedLanguage = newValue!;
+                          });
+                        } : null, // Disable interaction when not editing
+                        items: <String>['Gujarati', 'Hindi', 'English']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(color: Colors.white), // Ensure text is visible
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
+
                 const SizedBox(height: 40),
 
                 // Edit/Save Button
@@ -123,6 +170,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                         dob = dobController.text;
                         contactNo = contactController.text;
                         gender = genderController.text;
+                        // Language is already updated via Dropdown
                       }
                       isEditing = !isEditing; // Toggle the editing state
                     });
