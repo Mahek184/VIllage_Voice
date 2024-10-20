@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "178369608870",
+    "project_id": "database-3523d",
+    "storage_bucket": "database-3523d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178369608870:android:5b711f1030eb4ab41a0867",
+        "android_client_info": {
+          "package_name": "com.example.my_contact_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178369608870:android:3fe35d795551b23f1a0867",
+        "android_client_info": {
+          "package_name": "com.example.village_voice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

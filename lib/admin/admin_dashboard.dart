@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:village_voice/admin/admin_complaint_field.dart';
-import 'package:village_voice/health_tips_screen.dart';
 import 'package:village_voice/admin/admin_profile_screen.dart';
 import 'package:village_voice/notification_screen.dart'; // Import the NotificationScreen
 import 'package:village_voice/admin/admin_event_schedule.dart'; // Import the EventScheduleScreen
 import 'package:village_voice/gallery_screen.dart'; // Import the GalleryScreen
-import 'package:village_voice/admin/admin_emergency_list.dart'; // Import the EmergencyListScreen
+import 'package:village_voice/admin/admin_emergency_list_screen.dart'; // Import the EmergencyListScreen
 import 'package:village_voice/admin/admin_health_tips_screen.dart';
 
 class AdminDashboard extends StatelessWidget {
@@ -103,7 +102,7 @@ class AdminDashboard extends StatelessWidget {
                   context,
                   'assets/emergency book.png',
                   'Emergency List',
-                  AdminEmergencyList(), // Navigate to EmergencyListScreen
+                  AdminEmergencyListScreen(), // Navigate to EmergencyListScreen
                 ),
               ],
             ),
