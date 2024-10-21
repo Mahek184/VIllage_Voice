@@ -1,7 +1,108 @@
+import 'dart:developer'; // For log function
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'signin_screen.dart'; // Import your SignInScreen
 
-class WithEmailScreen extends StatelessWidget {
+class WithEmailScreen extends StatefulWidget {
+  @override
+  State<WithEmailScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<WithEmailScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cPasswordController = TextEditingController();
+  bool _isObscure = true;
+  bool _isLoading = false;
+
+  // Create Account method with enhanced error handling
+  void createAccount() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String cPassword = cPasswordController.text.trim();
+
+    if (email == "" || password == "" || cPassword == "") {
+      showSnackBarMessage("Please fill all the details!");
+    } else if (password != cPassword) {
+      showSnackBarMessage("Passwords do not match!");
+    } else if (password.length < 8) {
+      showSnackBarMessage("Password should be at least 8 characters long.");
+    } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      showSnackBarMessage("Password should contain at least one uppercase letter.");
+    } else if (!RegExp(r'[0-9]').hasMatch(password)) {
+      showSnackBarMessage("Password should contain at least one number.");
+    } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+      showSnackBarMessage("Password should contain at least one special character.");
+    } else {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        if (userCredential.user != null) {
+          Navigator.pop(context); // Navigate back on successful sign-up
+        }
+      } on FirebaseAuthException catch (ex) {
+        log(ex.code.toString());
+        showSnackBarMessage("Error: ${ex.message}");
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  // Snackbar message display
+  void showSnackBarMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
+  // Dispose the controllers to prevent memory leaks
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    cPasswordController.dispose();
+    super.dispose();
+  }
+
+  // Custom TextField widget to avoid repetitive code
+  Widget customTextField({
+    required TextEditingController controller,
+    required String label,
+    bool isObscure = false,
+    Widget? suffixIcon,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: isObscure,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.white),
+        fillColor: Colors.transparent,
+        filled: true,
+        suffixIcon: suffixIcon,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.blueGrey.shade200),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.white),
+        ),
+      ),
+      style: TextStyle(color: Colors.white),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,64 +126,33 @@ class WithEmailScreen extends StatelessWidget {
             SizedBox(height: 30),
 
             // Email address TextField
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'E-mail address',
-                labelStyle: TextStyle(color: Colors.white),
-                fillColor: Colors.transparent,
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.blueGrey.shade200),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+            customTextField(
+              controller: emailController,
+              label: 'E-mail address',
             ),
             SizedBox(height: 20),
 
-            // Password TextField
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                labelStyle: TextStyle(color: Colors.white),
-                fillColor: Colors.transparent,
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.blueGrey.shade200),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
+            // Password TextField with visibility toggle
+            customTextField(
+              controller: passwordController,
+              label: 'Password',
+              isObscure: _isObscure,
+              suffixIcon: IconButton(
+                icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    _isObscure = !_isObscure;
+                  });
+                },
               ),
-              style: TextStyle(color: Colors.white),
             ),
             SizedBox(height: 20),
 
             // Confirm Password TextField
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Enter Password Again',
-                labelStyle: TextStyle(color: Colors.white),
-                fillColor: Colors.transparent,
-                filled: true,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.blueGrey.shade200),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-              ),
-              style: TextStyle(color: Colors.white),
+            customTextField(
+              controller: cPasswordController,
+              label: 'Enter Password Again',
+              isObscure: true,
             ),
             SizedBox(height: 10),
 
@@ -97,29 +167,29 @@ class WithEmailScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
 
-            // 'Get started, it’s free!' Button
+            // 'Get started' Button
             ElevatedButton(
-              onPressed: () {
-                // Define action for sign-up
-              },
+              onPressed: _isLoading ? null : createAccount,
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF4F6979), // Button background color
+                backgroundColor: Color(0xFF4F6979),
                 padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: Text(
-                "Get started",
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
+              child: _isLoading
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      "Get started",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
             ),
             SizedBox(height: 20),
 
-            // 'Do you have already an account?' Text
+            // 'Already have an account?' Text
             Center(
               child: Text(
-                "Do you have already an account?",
+                "Do you already have an account?",
                 style: TextStyle(color: Colors.blueGrey.shade100),
               ),
             ),
@@ -135,7 +205,7 @@ class WithEmailScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF4F6979), // Button background color
+                backgroundColor: Color(0xFF4F6979),
                 padding: EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
