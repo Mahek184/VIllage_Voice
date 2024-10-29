@@ -1,97 +1,137 @@
 import 'package:flutter/material.dart';
-import 'package:village_voice/admin/admin_dashboard.dart'; // Replace `your_project_name` with your project name
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:village_voice/admin/admin_dashboard.dart';
 
-class AdminLoginScreen extends StatelessWidget {
+class AdminLoginScreen extends StatefulWidget {
+  @override
+  _AdminLoginScreenState createState() => _AdminLoginScreenState();
+}
+
+class _AdminLoginScreenState extends State<AdminLoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _isPasswordVisible = false; // Controls password visibility
+
+  Future<void> _login(BuildContext context) async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Fetch admin data from Firebase Firestore
+    final adminCollection =
+        FirebaseFirestore.instance.collection('admin login');
+
+    // Query to find admin with matching email and password
+    QuerySnapshot result = await adminCollection
+        .where('Mail', isEqualTo: email)
+        .where('Password', isEqualTo: password)
+        .get();
+
+    if (result.docs.isNotEmpty) {
+      // Credentials are correct, navigate to the dashboard
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AdminDashboard()),
+      );
+    } else {
+      // Show error if credentials are incorrect
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Invalid email or password")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF153448), // Background color for the screen
+      backgroundColor: Color(0xFF153448),
       appBar: AppBar(
-        backgroundColor: Color(0xFF153448), // Same background color as the screen
-        elevation: 0, // Remove shadow under the AppBar
+        backgroundColor: Color(0xFF153448),
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Back arrow icon
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
+            Navigator.pop(context);
           },
         ),
       ),
-      resizeToAvoidBottomInset: true, // Automatically adjust for the keyboard
-      body: SingleChildScrollView( // Make the screen scrollable
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0), // Padding around the body
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Logo or image at the top (use any image or widget)
               Center(
                 child: Container(
                   width: 200,
                   height: 200,
                   child: Image.asset(
-                    'assets/home_check.png', // Replace with your admin logo asset
+                    'assets/home_check.png',
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-              SizedBox(height: 30), // Space between the image and the input fields
-
-              // Username field
+              SizedBox(height: 30),
               TextField(
-                style: TextStyle(color: Colors.white), // Text color
+                controller: emailController,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  labelText: 'Username',
-                  hintText: 'Enter your username',
-                  labelStyle: TextStyle(color: Colors.white), // Label text color
-                  hintStyle: TextStyle(color: Colors.white60), // Hint text color (slightly transparent white)
-                  prefixIcon: Icon(Icons.person, color: Colors.white), // Icon color
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  labelStyle: TextStyle(color: Colors.white),
+                  hintStyle: TextStyle(color: Colors.white60),
+                  prefixIcon: Icon(Icons.email, color: Colors.white),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white), // Border color when not focused
+                    borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white), // Border color when focused
+                    borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              SizedBox(height: 20), // Space between the username and password fields
-
-              // Password field
+              SizedBox(height: 20),
               TextField(
-                obscureText: true, // For hiding the password
-                style: TextStyle(color: Colors.white), // Text color
+                controller: passwordController,
+                obscureText: !_isPasswordVisible, // Toggle visibility
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
-                  labelStyle: TextStyle(color: Colors.white), // Label text color
-                  hintStyle: TextStyle(color: Colors.white60), // Hint text color (slightly transparent white)
-                  prefixIcon: Icon(Icons.lock, color: Colors.white), // Icon color
-                  suffixIcon: Icon(Icons.visibility, color: Colors.white), // Eye icon color to show/hide password
+                  labelStyle: TextStyle(color: Colors.white),
+                  hintStyle: TextStyle(color: Colors.white60),
+                  prefixIcon: Icon(Icons.lock, color: Colors.white),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible =
+                            !_isPasswordVisible; // Toggle the boolean value
+                      });
+                    },
+                  ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white), // Border color when not focused
+                    borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white), // Border color when focused
+                    borderSide: BorderSide(color: Colors.white),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              SizedBox(height: 40), // Space between the password field and the login button
-
-              // Login button
+              SizedBox(height: 40),
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to AdminDashboard screen when login is clicked
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AdminDashboard()),
-                  );
-                },
+                onPressed: () => _login(context),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor: Color(0xFF4F6979), // Button color
+                  backgroundColor: Color.fromARGB(255, 209, 211, 212),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
