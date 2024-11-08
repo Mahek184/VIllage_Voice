@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.village_voice.app-mergeDebugResources-25:/values-v21/values-v21.xml",
+            "outputFile": "com.example.village_voice.app-mergeDebugResources-6:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-3\\18a7f5e1e6c11d26de9342f92785d7ea\\transformed\\core-1.10.1\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\922d83e6291c936b90ccac833eeed294\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

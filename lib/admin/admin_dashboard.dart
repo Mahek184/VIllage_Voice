@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:village_voice/admin/admin_complaint_field.dart';
 import 'package:village_voice/admin/admin_profile_screen.dart';
-import 'package:village_voice/notification_screen.dart';
-import 'package:village_voice/admin/admin_event_schedule.dart';
-import 'package:village_voice/gallery_screen.dart';
-import 'package:village_voice/admin/admin_emergency_list_screen.dart';
-import 'package:village_voice/admin/admin_health_tips_screen.dart';
-import 'dart:io';
 
 class AdminDashboard extends StatefulWidget {
+  const AdminDashboard({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AdminDashboardState createState() => _AdminDashboardState();
 }
 
@@ -57,7 +53,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               builder: (context) => const AdminProfileScreen()),
                         );
                       },
-                      child: CircleAvatar(
+                      child: const CircleAvatar(
                         radius: 30,
                         backgroundImage: AssetImage('assets/woman.png'),
                       ),
@@ -231,10 +227,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
           // Conditional minus icon for editing mode
           if (_isEditingMode)
-            Positioned(
+            const Positioned(
               right: 8,
               top: 8,
-              child: const Icon(Icons.edit, color: Colors.white, size: 20),
+              child: Icon(Icons.edit, color: Colors.white, size: 20),
             ),
         ],
       ),
@@ -287,7 +283,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void _deleteItem(String itemId) {
     _dashboardItems.doc(itemId).delete(); // Delete the item from Firestore
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Item deleted!')),
+      const SnackBar(content: Text('Item deleted!')),
     );
   }
 
@@ -347,7 +343,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: AdminDashboard(),
   ));
 }

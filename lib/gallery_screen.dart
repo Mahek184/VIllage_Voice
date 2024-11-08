@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class GalleryScreen extends StatelessWidget {
   const GalleryScreen({Key? key}) : super(key: key);

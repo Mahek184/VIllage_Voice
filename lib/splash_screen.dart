@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     // Navigate to WelcomeScreen after a delay of 3 seconds
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 1), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => WelcomeScreen()),
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 150, // Adjust the size of the image
                   height: 150,
                   child: Image.asset('assets/home_check.png'), // Ensure you add the asset here

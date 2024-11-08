@@ -117,7 +117,7 @@ class SignInScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF3C5B6F), // Button background color
+                    backgroundColor: const Color(0xFF3C5B6F), // Button background color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0), // 30 radius
                     ),
@@ -152,7 +152,7 @@ class SignInScreen extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF3C5B6F), // Button background color
+                        backgroundColor: const Color(0xFF3C5B6F), // Button background color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0), // 30 radius
                         ),

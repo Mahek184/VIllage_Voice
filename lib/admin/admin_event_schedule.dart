@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors_in_immutables, no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -92,17 +94,17 @@ class _AdminEventScheduleState extends State<AdminEventSchedule> {
             child: Column(
               children: [
                 TextField(
-                  decoration: InputDecoration(labelText: 'Event Title'),
+                  decoration: const InputDecoration(labelText: 'Event Title'),
                   onChanged: (value) => title = value,
                   controller: TextEditingController(text: title),
                 ),
                 TextField(
-                  decoration: InputDecoration(labelText: 'Event Date'),
+                  decoration: const InputDecoration(labelText: 'Event Date'),
                   onChanged: (value) => date = value,
                   controller: TextEditingController(text: date),
                 ),
                 TextField(
-                  decoration: InputDecoration(labelText: 'Event Description'),
+                  decoration: const InputDecoration(labelText: 'Event Description'),
                   onChanged: (value) => description = value,
                   controller: TextEditingController(text: description),
                 ),
@@ -112,7 +114,7 @@ class _AdminEventScheduleState extends State<AdminEventSchedule> {
                     imageFile = await _pickImage();
                     setState(() {}); // Update the UI with selected image
                   },
-                  icon: Icon(Icons.image),
+                  icon: const Icon(Icons.image),
                   label: Text(imageFile == null ? 'Pick Image' : 'Image Selected'),
                 ),
               ],
@@ -121,7 +123,7 @@ class _AdminEventScheduleState extends State<AdminEventSchedule> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -150,16 +152,16 @@ class _AdminEventScheduleState extends State<AdminEventSchedule> {
           onPressed: () {
             _showEventDialog(); // Open add event dialog
           },
-          child: Icon(Icons.add),
           backgroundColor: Colors.blue,
+          child: const Icon(Icons.add),
         ),
         const SizedBox(width: 16),
         FloatingActionButton(
           onPressed: () {
             _deleteAllEvents(); // Clear all events
           },
-          child: Icon(Icons.delete),
           backgroundColor: Colors.red,
+          child: const Icon(Icons.delete),
         ),
         const SizedBox(width: 16),
       ],

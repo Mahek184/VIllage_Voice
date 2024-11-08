@@ -1,22 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
+  String verificationId; // Store the verificationId passed from the phone screen
+
+  OtpScreen({required this.verificationId});
+
+  @override
+  _OtpScreenState createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  final TextEditingController _otpController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // Method to verify OTP (this will just redirect without checking OTP)
+  void _verifyOtp() async {
+    final otpCode = _otpController.text.trim();
+    
+    // Immediately navigate to dashboard without checking OTP
+    Navigator.pushReplacementNamed(context, '/dashboard');
+  }
+
+  // Method to resend OTP
+  void _resendOtp() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+91 YOUR_PHONE_NUMBER", // Replace with actual phone number
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${e.message}")),
+        );
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          // Update verificationId to new one after resend
+          widget.verificationId = verificationId;
+        });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        setState(() {
+          widget.verificationId = verificationId;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF153448), // Dark background color
+      backgroundColor: Color(0xFF153448),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height, // Full screen height
-          width: MediaQuery.of(context).size.width,   // Full screen width
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start, // Align items at the top
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 150), // Add a little space from the top (optional)
-
-              // Title
+              SizedBox(height: 150), // Title
               Text(
                 'Enter your code',
                 style: TextStyle(
@@ -26,10 +72,9 @@ class OtpScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-              SizedBox(height: 30),
-
-              // OTP Input Field
+              SizedBox(height: 30), // OTP Input Field
               TextField(
+                controller: _otpController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'Enter here',
@@ -46,26 +91,22 @@ class OtpScreen extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 20),
-
-              // Text about OTP being sent
+              SizedBox(height: 20), // Text about OTP being sent
               Text(
-                'We sent a 6-digit code to +192487562823',
+                'We sent a 6-digit code to your phone number.',
                 style: TextStyle(
                   color: Colors.blueGrey.shade100,
                   fontSize: 12,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 30),
-
-              // 'Verify OTP' Button
+              SizedBox(height: 30), // 'Verify OTP' Button
               ElevatedButton(
                 onPressed: () {
-                  // Define OTP verification logic here
+                  Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF4F6979), // Button background color
+                  backgroundColor: Color(0xFF4F6979),
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -75,14 +116,11 @@ class OtpScreen extends StatelessWidget {
                   "VERIFY OTP",
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
-              ),
-              SizedBox(height: 20),
+              ), // <-- Closing parenthesis for ElevatedButton
 
-              // 'Resend Code' Section with Icon
+              SizedBox(height: 20), // 'Resend Code' Section with Icon
               TextButton.icon(
-                onPressed: () {
-                  // Define resend code action here
-                },
+                onPressed: _resendOtp,
                 icon: Icon(Icons.message_outlined, color: Colors.white),
                 label: Text(
                   'Resend code',

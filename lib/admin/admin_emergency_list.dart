@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // Import image picker package
 
@@ -7,6 +9,7 @@ class AdminEmergencyList extends StatefulWidget {
   const AdminEmergencyList({Key? key, this.isAdmin = true}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AdminEmergencyListState createState() => _AdminEmergencyListState();
 }
 

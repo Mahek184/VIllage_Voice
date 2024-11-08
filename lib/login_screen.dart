@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:village_voice/google_sign_in.dart';
 import 'with_email_screen.dart'; // Import the Email Screen
 import 'with_phone_screen.dart'; // Import the Phone Screen
 
@@ -17,27 +18,30 @@ class LoginScreen extends StatelessWidget {
               Image.asset(
                 'assets/home_check.png', // Replace with your image path
                 height: 200,
-                width: 200,        // Adjust size as per requirement
+                width: 200, // Adjust size as per requirement
               ),
               SizedBox(height: 330), // Spacing between image and buttons
 
               // Google Sign Up Button
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // Background color for Google button
+                  backgroundColor:
+                      Colors.white, // Background color for Google button
                   foregroundColor: Colors.black, // Text color for Google button
                   minimumSize: Size(double.infinity, 50), // Button size
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Rounded edges
                   ),
                 ),
-                icon: Icon(Icons.g_mobiledata_outlined), // Google icon placeholder
+                icon: Icon(
+                    Icons.g_mobiledata_outlined), // Google icon placeholder
                 label: Text(
                   'Sign up with Google',
                   style: TextStyle(fontSize: 16), // Text size
                 ),
                 onPressed: () {
-                  // Handle Google sign-up
+                  GoogleSignInService.signInWithGoogle(
+                      context); // Trigger Google Sign-In
                 },
               ),
               SizedBox(height: 20), // Spacing between buttons
@@ -45,7 +49,8 @@ class LoginScreen extends StatelessWidget {
               // Email Sign Up Button
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF4F6979), // Background color for Email button
+                  backgroundColor:
+                      Color(0xFF4F6979), // Background color for Email button
                   minimumSize: Size(double.infinity, 50), // Button size
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Rounded edges
@@ -53,7 +58,8 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Sign up with E-mail',
-                  style: TextStyle(fontSize: 16, color: Colors.white), // Text size and color
+                  style: TextStyle(
+                      fontSize: 16, color: Colors.white), // Text size and color
                 ),
                 onPressed: () {
                   // Navigate to WithEmailScreen when the button is pressed
@@ -68,7 +74,8 @@ class LoginScreen extends StatelessWidget {
               // Phone Number Sign Up Button
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF4F6979), // Background color for Phone button
+                  backgroundColor:
+                      Color(0xFF4F6979), // Background color for Phone button
                   minimumSize: Size(double.infinity, 50), // Button size
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30), // Rounded edges
@@ -76,7 +83,8 @@ class LoginScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Sign up with Phone Number',
-                  style: TextStyle(fontSize: 16, color: Colors.white), // Text size and color
+                  style: TextStyle(
+                      fontSize: 16, color: Colors.white), // Text size and color
                 ),
                 onPressed: () {
                   // Navigate to WithPhoneScreen when the button is pressed

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.village_voice.app-mergeDebugResources-25:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.example.village_voice.app-mergeDebugResources-6:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "F:\\flutter\\village_voice\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "C:\\APP\\VIllage_Voice\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

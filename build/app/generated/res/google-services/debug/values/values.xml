@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="gcm_defaultSenderId" translatable="false">178369608870</string>
-    <string name="google_api_key" translatable="false">AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM</string>
-    <string name="google_app_id" translatable="false">1:178369608870:android:3fe35d795551b23f1a0867</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM</string>
-    <string name="google_storage_bucket" translatable="false">database-3523d.appspot.com</string>
-    <string name="project_id" translatable="false">database-3523d</string>
+    <string name="default_web_client_id" translatable="false">1084269317327-qim3e3r8g6im7ot83ibu4b51no4vie0j.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">1084269317327</string>
+    <string name="google_api_key" translatable="false">AIzaSyDMTP6TwXo6zk5VBA9ox_zV8BzRQMS0WDs</string>
+    <string name="google_app_id" translatable="false">1:1084269317327:android:08f5dbcb29c098e0cbfbba</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDMTP6TwXo6zk5VBA9ox_zV8BzRQMS0WDs</string>
+    <string name="google_storage_bucket" translatable="false">village-voice.appspot.com</string>
+    <string name="project_id" translatable="false">village-voice</string>
 </resources>

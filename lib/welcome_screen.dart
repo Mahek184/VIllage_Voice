@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:village_voice/login_screen.dart' as login; // Alias for the login screen
-import 'package:village_voice/signin_screen.dart' as signin; // Alias for the signin screen
+import 'package:village_voice/login_screen.dart'
+    as login; // Alias for the login screen
+import 'package:village_voice/signin_screen.dart'
+    as signin; // Alias for the signin screen
 import 'package:village_voice/admin/admin_login_screen.dart'; // Import for Admin Login Screen
 
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF153448), // Background color for the splash screen
+      backgroundColor:
+          Color(0xFF153448), // Background color for the splash screen
       body: Stack(
         children: [
           // First circular bubble with shadow and correct color
@@ -18,7 +21,8 @@ class WelcomeScreen extends StatelessWidget {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: Color(0xFF3C5B6F).withOpacity(0.5), // Circle color with some transparency
+                color: Color(0xFF3C5B6F)
+                    .withOpacity(0.5), // Circle color with some transparency
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -38,7 +42,8 @@ class WelcomeScreen extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: Color(0xFF3C5B6F).withOpacity(0.5), // Circle color with some transparency
+                color: Color(0xFF3C5B6F)
+                    .withOpacity(0.5), // Circle color with some transparency
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -58,7 +63,8 @@ class WelcomeScreen extends StatelessWidget {
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: Color(0xFF3C5B6F).withOpacity(0.5), // Circle color with some transparency
+                color: Color(0xFF3C5B6F)
+                    .withOpacity(0.5), // Circle color with some transparency
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -80,7 +86,7 @@ class WelcomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Image.asset(
-                'assets/complaint_box1.png', // Replace with your complaints box image
+                'assets/home_check.png', // Replace with your complaints box image
                 fit: BoxFit.contain,
               ),
             ),
@@ -107,7 +113,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               child: Text(
                 'Get Started',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18,  color: Colors.white,),
               ),
             ),
           ),
@@ -121,7 +127,8 @@ class WelcomeScreen extends StatelessWidget {
                 // Navigate to SignInScreen when 'I have an account' is pressed
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => signin.SignInScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => signin.SignInScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -133,7 +140,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               child: Text(
                 'I have an account',
-                style: TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18,  color: Colors.white,),
               ),
             ),
           ),
@@ -156,7 +163,8 @@ class WelcomeScreen extends StatelessWidget {
                     height: 30,
                     decoration: BoxDecoration(
                       color: Color(0xFF3C5B6F), // Box color
-                      borderRadius: BorderRadius.circular(8), // Square box with slightly rounded corners
+                      borderRadius: BorderRadius.circular(
+                          8), // Square box with slightly rounded corners
                     ),
                   ),
                   Positioned(

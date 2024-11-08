@@ -1,45 +1,87 @@
 {
   "project_info": {
-    "project_number": "178369608870",
-    "project_id": "database-3523d",
-    "storage_bucket": "database-3523d.appspot.com"
+    "project_number": "1084269317327",
+    "project_id": "village-voice",
+    "storage_bucket": "village-voice.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:178369608870:android:5b711f1030eb4ab41a0867",
+        "mobilesdk_app_id": "1:1084269317327:android:08f5dbcb29c098e0cbfbba",
         "android_client_info": {
-          "package_name": "com.example.my_contact_app"
+          "package_name": "com.example.village_voice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1084269317327-kajsqoftk0cp8sno2i31qgdb7m00fg1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.village_voice",
+            "certificate_hash": "f732c05347e8bfd72eff8eb406a27dd8f8085409"
+          }
+        },
+        {
+          "client_id": "1084269317327-qim3e3r8g6im7ot83ibu4b51no4vie0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM"
+          "current_key": "AIzaSyDMTP6TwXo6zk5VBA9ox_zV8BzRQMS0WDs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084269317327-dm2jghsrlc9neo4poobc0m15h22im3lr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1084269317327-ilbog1vfps5g3brganmcug3onnlirrjp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.villageVoice"
+              }
+            }
+          ]
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:178369608870:android:3fe35d795551b23f1a0867",
+        "mobilesdk_app_id": "1:1084269317327:android:6d1d6e1cc658dce1cbfbba",
         "android_client_info": {
-          "package_name": "com.example.village_voice"
+          "package_name": "com.example.villagevoice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1084269317327-qim3e3r8g6im7ot83ibu4b51no4vie0j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmaCCi0A-p_Iso5HSd85nBNx-DWrQ43QM"
+          "current_key": "AIzaSyDMTP6TwXo6zk5VBA9ox_zV8BzRQMS0WDs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084269317327-dm2jghsrlc9neo4poobc0m15h22im3lr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1084269317327-ilbog1vfps5g3brganmcug3onnlirrjp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.villageVoice"
+              }
+            }
+          ]
         }
       }
     }

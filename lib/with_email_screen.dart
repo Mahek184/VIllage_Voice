@@ -1,7 +1,8 @@
-import 'dart:developer'; // For log function
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'signin_screen.dart'; // Import your SignInScreen
+import 'signin_screen.dart';
+import 'dashboard.dart'; // Import your Dashboard screen
 
 class WithEmailScreen extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _SignUpScreenState extends State<WithEmailScreen> {
   bool _isObscure = true;
   bool _isLoading = false;
 
-  // Create Account method with enhanced error handling
+  // Enhanced Create Account method
   void createAccount() async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
@@ -28,11 +29,13 @@ class _SignUpScreenState extends State<WithEmailScreen> {
     } else if (password.length < 8) {
       showSnackBarMessage("Password should be at least 8 characters long.");
     } else if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      showSnackBarMessage("Password should contain at least one uppercase letter.");
+      showSnackBarMessage(
+          "Password should contain at least one uppercase letter.");
     } else if (!RegExp(r'[0-9]').hasMatch(password)) {
       showSnackBarMessage("Password should contain at least one number.");
     } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
-      showSnackBarMessage("Password should contain at least one special character.");
+      showSnackBarMessage(
+          "Password should contain at least one special character.");
     } else {
       setState(() {
         _isLoading = true;
@@ -41,7 +44,13 @@ class _SignUpScreenState extends State<WithEmailScreen> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
         if (userCredential.user != null) {
-          Navigator.pop(context); // Navigate back on successful sign-up
+          // Show account created message
+          showSnackBarMessage("Account created successfully!");
+          // Redirect to Dashboard
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Dashboard()),
+          );
         }
       } on FirebaseAuthException catch (ex) {
         log(ex.code.toString());
@@ -59,13 +68,11 @@ class _SignUpScreenState extends State<WithEmailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        
         backgroundColor: Colors.red,
       ),
     );
   }
 
-  // Dispose the controllers to prevent memory leaks
   @override
   void dispose() {
     emailController.dispose();
@@ -74,7 +81,6 @@ class _SignUpScreenState extends State<WithEmailScreen> {
     super.dispose();
   }
 
-  // Custom TextField widget to avoid repetitive code
   Widget customTextField({
     required TextEditingController controller,
     required String label,
@@ -113,7 +119,6 @@ class _SignUpScreenState extends State<WithEmailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Title
             Text(
               'Sign Up with Email',
               style: TextStyle(
@@ -124,21 +129,18 @@ class _SignUpScreenState extends State<WithEmailScreen> {
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 30),
-
-            // Email address TextField
             customTextField(
               controller: emailController,
               label: 'E-mail address',
             ),
             SizedBox(height: 20),
-
-            // Password TextField with visibility toggle
             customTextField(
               controller: passwordController,
               label: 'Password',
               isObscure: _isObscure,
               suffixIcon: IconButton(
-                icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                icon:
+                    Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
                 onPressed: () {
                   setState(() {
                     _isObscure = !_isObscure;
@@ -147,16 +149,12 @@ class _SignUpScreenState extends State<WithEmailScreen> {
               ),
             ),
             SizedBox(height: 20),
-
-            // Confirm Password TextField
             customTextField(
               controller: cPasswordController,
               label: 'Enter Password Again',
               isObscure: true,
             ),
             SizedBox(height: 10),
-
-            // Password Instructions
             Text(
               'Use 8 or more characters with a mix of letters,\n numbers & symbols.',
               style: TextStyle(
@@ -166,8 +164,6 @@ class _SignUpScreenState extends State<WithEmailScreen> {
               textAlign: TextAlign.left,
             ),
             SizedBox(height: 30),
-
-            // 'Get started' Button
             ElevatedButton(
               onPressed: _isLoading ? null : createAccount,
               style: ElevatedButton.styleFrom(
@@ -185,8 +181,6 @@ class _SignUpScreenState extends State<WithEmailScreen> {
                     ),
             ),
             SizedBox(height: 20),
-
-            // 'Already have an account?' Text
             Center(
               child: Text(
                 "Do you already have an account?",
@@ -194,11 +188,8 @@ class _SignUpScreenState extends State<WithEmailScreen> {
               ),
             ),
             SizedBox(height: 10),
-
-            // 'Sign in' Button
             ElevatedButton(
               onPressed: () {
-                // Navigate to SignInScreen when the button is clicked
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SignInScreen()),

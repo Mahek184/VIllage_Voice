@@ -1,0 +1,1 @@
+ C:\\APP\\VIllage_Voice\\.dart_tool\\flutter_build\\6b03cd061279a46c5fa12c4f938832a4\\native_assets.yaml: 

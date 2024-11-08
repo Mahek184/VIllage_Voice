@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -5,7 +7,7 @@ import 'dart:io';
 class AdminComplaintField extends StatefulWidget {
   final bool isAdmin; // Flag to check if the user is admin
 
-  AdminComplaintField({this.isAdmin = true}); // Default user is admin
+  const AdminComplaintField({this.isAdmin = true}); // Default user is admin
 
   @override
   _AdminComplaintFieldState createState() => _AdminComplaintFieldState();
@@ -23,9 +25,9 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
 
   // Function to pick image from device
   Future<File?> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? image =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       return File(image.path);
     }
@@ -76,7 +78,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: TextField(
+                child: const TextField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: Icon(Icons.mic),
@@ -91,10 +93,10 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: GridView.builder(
-                physics: NeverScrollableScrollPhysics(), // Preventing GridView scrolling, as SingleChildScrollView is used
+                physics: const NeverScrollableScrollPhysics(), // Preventing GridView scrolling, as SingleChildScrollView is used
                 shrinkWrap: true, // Ensures GridView takes up minimal vertical space
                 itemCount: categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 20,
                   crossAxisSpacing: 20,
@@ -119,7 +121,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                     onPressed: () {
                       _showAddCategoryDialog(); // Add new category
                     },
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                   ),
                 ],
               ),
@@ -132,7 +134,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
   // Helper function to build category card
   Widget _buildCategoryCard(BuildContext context, String title, String imagePath, int index) {
     return Card(
-      color: Color(0xFF3C5B6F),
+      color: const Color(0xFF3C5B6F),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -150,7 +152,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 50,
                     child: imagePath.contains('assets/')
                         ? Image.asset(
@@ -183,28 +185,28 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 14, 43, 63),
+                              color: const Color.fromARGB(255, 14, 43, 63),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: IconButton(
                               padding: EdgeInsets.zero,
-                              icon: Icon(Icons.edit, color: Colors.white, size: 16),
+                              icon: const Icon(Icons.edit, color: Colors.white, size: 16),
                               onPressed: () {
                                 _showEditCategoryDialog(index); // Edit category
                               },
                             ),
                           ),
-                          SizedBox(width: 10), // Space between edit and delete buttons
+                          const SizedBox(width: 10), // Space between edit and delete buttons
                           Container(
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 14, 43, 63),
+                              color: const Color.fromARGB(255, 14, 43, 63),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: IconButton(
                               padding: EdgeInsets.zero,
-                              icon: Icon(Icons.delete, color: const Color.fromARGB(255, 255, 255, 255), size: 16),
+                              icon: const Icon(Icons.delete, color: Color.fromARGB(255, 255, 255, 255), size: 16),
                               onPressed: () {
                                 _deleteCategory(index); // Delete category
                               },
@@ -212,7 +214,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                           ),
                         ],
                       )
-                    : Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                    : const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
               ),
             ],
           ),
@@ -232,12 +234,12 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
         return StatefulBuilder( // Use StatefulBuilder to manage the state within the dialog
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('Add Category'),
+              title: const Text('Add Category'),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
                     TextField(
-                      decoration: InputDecoration(labelText: 'Category Name'),
+                      decoration: const InputDecoration(labelText: 'Category Name'),
                       onChanged: (value) {
                         newTitle = value;
                       },
@@ -248,7 +250,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                         imageFile = await _pickImage();
                         setState(() {}); // Update the UI with selected image
                       },
-                      icon: Icon(Icons.image),
+                      icon: const Icon(Icons.image),
                       label: Text(imageFile == null ? 'Pick Image' : 'Image Selected'),
                     ),
                   ],
@@ -259,7 +261,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -267,7 +269,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                     _addCategory(newTitle, imagePath);
                     Navigator.pop(context);
                   },
-                  child: Text('Add'),
+                  child: const Text('Add'),
                 ),
               ],
             );
@@ -279,7 +281,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
 
   // Show dialog for editing a category
   void _showEditCategoryDialog(int index) {
-    TextEditingController _controller = TextEditingController(text: categories[index]['title']!);
+    TextEditingController controller = TextEditingController(text: categories[index]['title']!);
     File? imageFile;
 
     showDialog(
@@ -288,13 +290,13 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
         return StatefulBuilder( // Use StatefulBuilder to manage the state within the dialog
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('Edit Category'),
+              title: const Text('Edit Category'),
               content: SingleChildScrollView(
                 child: Column(
                   children: [
                     TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(labelText: 'Category Name'),
+                      controller: controller,
+                      decoration: const InputDecoration(labelText: 'Category Name'),
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton.icon(
@@ -302,7 +304,7 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                         imageFile = await _pickImage();
                         setState(() {});
                       },
-                      icon: Icon(Icons.image),
+                      icon: const Icon(Icons.image),
                       label: Text(imageFile == null ? 'Change Image' : 'Image Selected'),
                     ),
                   ],
@@ -313,15 +315,15 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () {
-                    String? imagePath = imageFile != null ? imageFile!.path : null;
-                    _editCategory(index, _controller.text, imagePath);
+                    String? imagePath = imageFile?.path;
+                    _editCategory(index, controller.text, imagePath);
                     Navigator.pop(context);
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
                 ),
               ],
             );
@@ -333,11 +335,13 @@ class _AdminComplaintFieldState extends State<AdminComplaintField> {
 }
 
 class AdminDashboard extends StatelessWidget {
+  const AdminDashboard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Dashboard'),
+        title: const Text('Admin Dashboard'),
       ),
       body: Center(
         child: ElevatedButton(
@@ -345,11 +349,11 @@ class AdminDashboard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AdminComplaintField(isAdmin: true),
+                builder: (context) => const AdminComplaintField(isAdmin: true),
               ),
             );
           },
-          child: Text('Go to Complaint Categories'),
+          child: const Text('Go to Complaint Categories'),
         ),
       ),
     );
@@ -357,7 +361,7 @@ class AdminDashboard extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: AdminDashboard(), // Start at the Admin Dashboard
     debugShowCheckedModeBanner: false,
   ));
