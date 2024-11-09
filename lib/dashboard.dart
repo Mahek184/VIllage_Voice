@@ -45,7 +45,7 @@ class Dashboard extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    "Welcome Admin",
+                    "Welcome",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
