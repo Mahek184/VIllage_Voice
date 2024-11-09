@@ -1,8 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"> <!-- Move this to the top -->
+
     <!-- Permissions for accessing the internet and device storage -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
+    <!-- Override library with minSdkVersion mismatch -->
+    <uses-sdk
+        tools:overrideLibrary="androidx.window" /> <!-- Properly place it here -->
 
     <application
         android:label="village_voice"
@@ -19,8 +25,8 @@
             android:windowSoftInputMode="adjustResize">
 
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme" />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
               
             <meta-data
                 android:name="com.google.android.gms.auth.api.signin.GOOGLE_SIGN_IN_OPTIONS"

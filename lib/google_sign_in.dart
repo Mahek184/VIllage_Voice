@@ -8,7 +8,7 @@ class GoogleSignInService {
   static Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       if (googleUser != null) {
         // Successful sign-in, navigate to DashboardScreen
         Navigator.pushReplacement(
@@ -25,7 +25,8 @@ class GoogleSignInService {
       // Handle errors and show a failure message
       print('Error signing in with Google: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Google Sign-In failed. Please try again.")),
+        const SnackBar(
+            content: Text("Google Sign-In failed. Please try again.")),
       );
     }
   }

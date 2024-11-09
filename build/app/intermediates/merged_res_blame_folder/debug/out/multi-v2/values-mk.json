@@ -21,23 +21,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\09858355bd2849ec13494a6c032201b2\\transformed\\browser-1.4.0\\res\\values-mk\\values-mk.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,168,273,388",
-                        "endColumns": "112,104,114,100",
-                        "endOffsets": "163,268,383,484"
-                    },
-                    "to": {
-                        "startLines": "27,28,29,30",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "3017,3130,3235,3350",
-                        "endColumns": "112,104,114,100",
-                        "endOffsets": "3125,3230,3345,3446"
-                    }
-                },
-                {
                     "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\922d83e6291c936b90ccac833eeed294\\transformed\\core-1.13.1\\res\\values-mk\\values-mk.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\4d1b100294b2eda8b55d5d7242de4bde\\transformed\\jetified-play-services-base-18.1.0\\res\\values-mk\\values.xml",
+                    "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\8e318483d4377ab6b733c4749ebd7811\\transformed\\jetified-play-services-base-18.3.0\\res\\values-mk\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -69,6 +52,23 @@
                         "startOffsets": "774,881,1042,1175,1285,1430,1563,1683,1930,2087,2194,2360,2493,2646,2805,2874,2938",
                         "endColumns": "106,160,132,109,144,132,119,109,156,106,165,132,152,158,68,63,78",
                         "endOffsets": "876,1037,1170,1280,1425,1558,1678,1788,2082,2189,2355,2488,2641,2800,2869,2933,3012"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\khush\\.gradle\\caches\\transforms-3\\7b2d05b189a6e775e1863782fc17822a\\transformed\\browser-1.8.0\\res\\values-mk\\values-mk.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,168,273,388",
+                        "endColumns": "112,104,114,100",
+                        "endOffsets": "163,268,383,484"
+                    },
+                    "to": {
+                        "startLines": "27,28,29,30",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "3017,3130,3235,3350",
+                        "endColumns": "112,104,114,100",
+                        "endOffsets": "3125,3230,3345,3446"
                     }
                 }
             ]

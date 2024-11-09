@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
   String verificationId; // Store the verificationId passed from the phone screen
 
@@ -15,12 +16,6 @@ class _OtpScreenState extends State<OtpScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Method to verify OTP (this will just redirect without checking OTP)
-  void _verifyOtp() async {
-    final otpCode = _otpController.text.trim();
-    
-    // Immediately navigate to dashboard without checking OTP
-    Navigator.pushReplacementNamed(context, '/dashboard');
-  }
 
   // Method to resend OTP
   void _resendOtp() async {

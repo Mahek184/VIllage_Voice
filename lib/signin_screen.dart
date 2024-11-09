@@ -1,166 +1,179 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart'; // Import the Dashboard screen
-import 'login_screen.dart'; // Import the LoginScreen
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dashboard.dart';
+import 'login_screen.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _rememberMe = false;
+
+  Future<void> signIn() async {
+    try {
+      // Sign in with Firebase Authentication
+      final UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Fetch user data from Firestore
+      final DocumentSnapshot userDoc = await _firestore
+          .collection('users')
+          .doc(userCredential.user?.uid)
+          .get();
+
+      if (userDoc.exists) {
+        print('User data: ${userDoc.data()}');
+        // Redirect to Dashboard on successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()),
+        );
+      } else {
+        print('User data not found');
+      }
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: ${e.toString()}')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF153448), // Dark background color
+      backgroundColor: const Color(0xFF153448),
       appBar: AppBar(
         backgroundColor: Colors.blueGrey[700],
         leading: IconButton(
-          icon: Icon(Icons.arrow_back), // Back arrow icon
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
+            Navigator.pop(context);
           },
         ),
-        title: const Text('Sign In'), // Title next to back button
+        title: const Text('Sign In'),
       ),
-      body: SingleChildScrollView( // Add SingleChildScrollView to avoid overflow
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Login label placed on top of the text field
-              const Text(
-                'Login',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              const Text('Login',
+                  style: TextStyle(color: Colors.white, fontSize: 16)),
               const SizedBox(height: 8),
-              // Login input field
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
-                  hintText: 'MAIL/NUMBER', // Placeholder text inside the box
+                  hintText: 'MAIL/NUMBER',
                   hintStyle: const TextStyle(color: Colors.white54),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 16.0),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white54),
-                    borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
               const SizedBox(height: 16),
-
-              // Password label placed on top of the text field
-              const Text(
-                'Password',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              const Text('Password',
+                  style: TextStyle(color: Colors.white, fontSize: 16)),
               const SizedBox(height: 8),
-              // Password input field
               TextField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: '********', // Placeholder text inside the box
+                  hintText: '********',
                   hintStyle: const TextStyle(color: Colors.white54),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 16.0),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white54),
-                    borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(20.0), // Rounded corners
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
               const SizedBox(height: 10),
-
-              // Remember me and Forgot password
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
                       Checkbox(
-                        value: false,
-                        onChanged: (bool? newValue) {},
-                        activeColor: Colors.white, // Checkbox color
-                        checkColor: const Color(0xFF153448), // Checkmark color
+                        value: _rememberMe,
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            _rememberMe = newValue ?? false;
+                          });
+                        },
+                        activeColor: Colors.white,
+                        checkColor: const Color(0xFF153448),
                       ),
-                      const Text(
-                        'Remember me',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      const Text('Remember me',
+                          style: TextStyle(color: Colors.white)),
                     ],
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text(
-                      'Forgot password',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text('Forgot password',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Sign in button with fixed width and height
               SizedBox(
-                width: double.infinity, // Full width
-                height: 56.0, // Fixed height
+                width: double.infinity,
+                height: 56.0,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Dashboard when Sign in is clicked
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Dashboard()),
-                    );
-                  },
+                  onPressed: signIn,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3C5B6F), // Button background color
+                    backgroundColor: const Color(0xFF3C5B6F),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0), // 30 radius
-                    ),
+                        borderRadius: BorderRadius.circular(30.0)),
                   ),
-                  child: const Text(
-                    'Sign in',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text('Sign in',
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
-              const SizedBox(height: 30), // Increased space between buttons
-
-              // Sign Up section
+              const SizedBox(height: 30),
               Column(
                 children: [
-                  const Text(
-                    'If you don\'t have an account yet?',
-                    style: TextStyle(color: Colors.white54),
-                  ),
+                  const Text('If you don\'t have an account yet?',
+                      style: TextStyle(color: Colors.white54)),
                   const SizedBox(height: 8),
-
-                  // Sign up button with same width and height
-                  SizedBox(
-                    width: double.infinity, // Full width
-                    height: 56.0, // Fixed height
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Redirect to LoginScreen when Sign Up is clicked
-                        Navigator.push(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginScreen()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF3C5B6F), // Button background color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0), // 30 radius
-                        ),
-                      ),
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -171,11 +184,4 @@ class SignInScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: SignInScreen(),
-    debugShowCheckedModeBanner: false,
-  ));
 }
