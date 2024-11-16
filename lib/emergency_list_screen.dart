@@ -72,7 +72,6 @@ class EmergencyListScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 5),
-                        const SizedBox(height: 5),
                         Text(
                           'Phone: $phone',
                           style: TextStyle(color: Colors.white),
