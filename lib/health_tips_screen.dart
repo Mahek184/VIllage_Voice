@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HealthTipsScreen extends StatelessWidget {
   const HealthTipsScreen({Key? key}) : super(key: key);
@@ -23,22 +24,44 @@ class HealthTipsScreen extends StatelessWidget {
       body: Container(
         color: const Color(0xFF153448), // Background color
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            _buildHealthTipCard(
-              "1. Fever",
-              "→ Symptoms:\nIncreased Body Temperature, Sweating and Shivering, Headache and Fatigue, Muscle Aches, Loss of Appetite, Irritability\n\n"
-              "→ Prevention:\nGood Hygiene, Avoid Crowded Areas, Vaccination, Sanitize Surfaces, Boost Immunity, Proper Ventilation\n\n"
-              "→ Hydration:\nWater, Oral Rehydration Solution (ORS), Coconut Water, Herbal Teas, Fruit Juices",
-            ),
-            const SizedBox(height: 15),
-            _buildHealthTipCard(
-              "2. Dengue Fever",
-              "→ Symptoms:\nHigh fever, severe headache, pain behind the eyes, joint/muscle pain, nausea, vomiting, skin rash\n\n"
-              "→ Hydration:\nDrink fluids like ORS (Oral Rehydration Solution), coconut water, or fruit juices to stay hydrated.\n\n"
-              "→ Prevention:\nUse mosquito nets, apply insect repellents, wear long-sleeved clothing, and remove standing water around your home to reduce mosquito breeding.",
-            ),
-          ],
+        child: FutureBuilder<QuerySnapshot>(
+          future: FirebaseFirestore.instance.collection('health_tips').get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            final healthTips = snapshot.data!.docs;
+
+            if (healthTips.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No health tips available.',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: healthTips.length,
+              itemBuilder: (context, index) {
+                var tip = healthTips[index];
+                String title = tip['title']; // Fetch the 'title' field
+                String content = tip['content']; // Fetch the 'content' field
+
+                return Column(
+                  children: [
+                    _buildHealthTipCard(title, content),
+                    const SizedBox(height: 15), // Add gap between cards
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );
