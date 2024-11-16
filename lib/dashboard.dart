@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:village_voice/announcement_screen.dart';
 import 'package:village_voice/complaint_field_screen.dart';
-import 'package:village_voice/notification_screen.dart';
+import 'package:village_voice/emergency_list_screen.dart';
 import 'package:village_voice/event_schedule_screen.dart';
 import 'package:village_voice/gallery_screen.dart';
-import 'package:village_voice/emergency_list_screen.dart';
-import 'health_tips_screen.dart';
+import 'package:village_voice/health_tips_screen.dart';
+
+import 'package:village_voice/login_screen.dart';
 
 class Dashboard extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  // Open dialog for editing profile
   Future<void> _editProfile(BuildContext context) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Profile'),
+          title: const Text('Edit Profile'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
               ),
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                // Debugging print statement to check if button works
-                print('Name: ${_nameController.text}');
-                print('Email: ${_emailController.text}');
-                Navigator.of(context).pop(); // Close dialog
+              onPressed: () async {
+                // Handle profile update here
+                Navigator.of(context).pop();
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         );
@@ -53,116 +53,42 @@ class Dashboard extends StatelessWidget {
     );
   }
 
+  Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        // Disable the back button on the Dashboard screen
-        return Future.value(false); // Returning false prevents the back action
-      },
+      onWillPop: () async => false, // Prevent back navigation
       child: Scaffold(
         backgroundColor: const Color(0xFF153448),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: null, // Ensure the back button is removed
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.language, color: Colors.white),
+              onPressed: () {}, // Language selection logic
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: () => _logout(context),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF3C5B6F),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        // Open the edit profile dialog on tap
-                        _editProfile(context);
-                      },
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage('assets/woman.png'),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    const Text(
-                      "Welcome",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                      icon: Icon(Icons.language, color: Colors.white),
-                      onPressed: () {
-                        // Action for changing language
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              _buildProfileSection(context),
               const SizedBox(height: 30),
               Expanded(
-                child: FutureBuilder<QuerySnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection('user dashboard items')
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-
-                    final dashboardItems = snapshot.data!.docs;
-
-                    return GridView.builder(
-                      padding: const EdgeInsets.all(8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemCount: dashboardItems.length,
-                      itemBuilder: (context, index) {
-                        var item = dashboardItems[index];
-                        var data = item.data() as Map<String, dynamic>;
-
-                        var imagePath = data.containsKey('imagePath')
-                            ? data['imagePath']
-                            : 'assets/weather update.png';
-                        var title = data.containsKey('title')
-                            ? data['title']
-                            : 'Unknown';
-
-                        return _buildDashboardItem(
-                          context,
-                          imagePath,
-                          title,
-                          _getScreenForItem(title),
-                        );
-                      },
-                    );
-                  },
-                ),
+                child: _buildDashboardGrid(),
               ),
             ],
           ),
@@ -171,33 +97,123 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _getScreenForItem(String title) {
-    switch (title) {
-      case 'Event Schedule':
-        return EventScheduleScreen();
-      case 'Complaint Box':
-        return ComplaintFieldScreen();
-      case 'Announcement':
-        return NotificationScreen();
-      case 'Gallery':
-        return GalleryScreen();
-      case 'Health Tips':
-        return HealthTipsScreen();
-      case 'Emergency List':
-        return EmergencyListScreen();
-      default:
-        return const Center(child: Text('Unknown Screen'));
-    }
+  Widget _buildProfileSection(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF3C5B6F),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () => _editProfile(context),
+            child: CircleAvatar(
+              radius: 30,
+              backgroundImage: const AssetImage('assets/woman.png'),
+            ),
+          ),
+          const SizedBox(width: 15),
+          const Text(
+            "Welcome",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const Spacer(),
+        ],
+      ),
+    );
   }
 
-  Widget _buildDashboardItem(
-      BuildContext context, String imagePath, String label, Widget targetPage) {
+  Widget _buildDashboardGrid() {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('dashboard_items').get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+        final dashboardItems = snapshot.data!.docs;
+        if (dashboardItems.isEmpty) {
+          return const Center(child: Text('No items available.'));
+        }
+        return GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+          ),
+          itemCount: dashboardItems.length,
+          itemBuilder: (context, index) {
+            final item = dashboardItems[index];
+            final data = item.data() as Map<String, dynamic>;
+            final iconPath = data['iconPath'] ?? 'assets/placeholder.png';
+            final label = data['label'] ?? 'Unknown';
+            final itemId = item.id;
+
+            return _buildDashboardItem(
+              context,
+              iconPath,
+              label,
+              itemId,
+              data['label'] ?? '',
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDashboardItem(BuildContext context, String imagePath,
+      String label, String itemId, String itemLabel) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => targetPage),
-        );
+        // Navigation logic for each dashboard item
+        if (label == "Gallery") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => GalleryScreen()),
+          );
+        } else if (label == "Emergency List") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EmergencyListScreen()),
+          );
+        } else if (label == "Announcement") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AnnouncementScreen()),
+          );
+        } else if (label == "Health Tips") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HealthTipsScreen()),
+          );
+        } else if (label == "Complaint Box") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ComplaintFieldScreen()),
+          );
+        } else if (label == "Event Schedule") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EventScheduleScreen()),
+          );
+        }
       },
       child: Column(
         children: [
