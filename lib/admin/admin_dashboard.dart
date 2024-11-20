@@ -1,21 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:village_voice/Screen/weather_home.dart';
+import 'package:village_voice/admin/admin_announcement.dart';
+import 'package:village_voice/admin/admin_complaint_field.dart';
+import 'package:village_voice/admin/admin_emergency_list_screen.dart';
+import 'package:village_voice/admin/admin_event_schedule.dart';
+import 'package:village_voice/admin/admin_health_tips_screen.dart';
 import 'package:village_voice/admin/admin_profile_screen.dart';
+import 'package:village_voice/admin/admin_gallery.dart';
+import 'package:village_voice/welcome_screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _AdminDashboardState createState() => _AdminDashboardState();
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
   final CollectionReference _dashboardItems =
       FirebaseFirestore.instance.collection('dashboard_items');
-
-  bool _isEditingMode = false; // Track if in editing mode
-  bool _isDeleteMode = false; // Track if in delete mode
+  bool _isEditingMode = false;
+  bool _isDeleteMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +32,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
         backgroundColor: Colors.blueGrey[700],
         elevation: 0,
         toolbarHeight: 0, // Hide AppBar for a cleaner look
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.white),
+            onPressed: _logout,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -49,7 +62,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
+                          MaterialPageRoute(  
                               builder: (context) => const AdminProfileScreen()),
                         );
                       },
@@ -66,7 +79,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ],
                 ),
               ),
-
               // Dashboard grid items
               Expanded(
                 child: Padding(
@@ -111,6 +123,17 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ],
           ),
 
+          // Logout icon positioned on the top right corner of the "Welcome Admin" container
+          Positioned(
+            top:
+                30, // Position the logout icon near the top right of the "Welcome Admin" container
+            right: 20, // Adjust the right margin as needed
+            child: IconButton(
+              icon: const Icon(Icons.logout, color: Colors.white),
+              onPressed: _logout,
+            ),
+          ),
+
           // Edit, Delete, and Add buttons at the bottom right corner
           Positioned(
             bottom: 16,
@@ -125,14 +148,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       _isDeleteMode = !_isDeleteMode; // Toggle delete mode
                     });
                   },
-                  icon: const Icon(Icons.delete,
-                      color: Color(0xFF3C5B6F)), // Icon color set to 0xFF3C5B6F
+                  icon: const Icon(Icons.delete, color: Color(0xFF3C5B6F)),
                   label: const SizedBox.shrink(), // Remove label
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.white, // Change background color to white
-                    padding: const EdgeInsets.all(
-                        10), // Adjust padding to minimize space
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.all(10),
                   ),
                 ),
                 const SizedBox(width: 10), // Space between buttons
@@ -143,22 +163,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       _isEditingMode = !_isEditingMode; // Toggle edit mode
                     });
                   },
-                  icon: const Icon(Icons.edit,
-                      color: Color(0xFF3C5B6F)), // Icon color set to 0xFF3C5B6F
-                  label: const SizedBox.shrink(), // Remove label
+                  icon: const Icon(Icons.edit, color: Color(0xFF3C5B6F)),
+                  label: const SizedBox.shrink(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.white, // Change background color to white
-                    padding: const EdgeInsets.all(
-                        10), // Adjust padding to minimize space
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.all(10),
                   ),
                 ),
-                const SizedBox(width: 10), // Space between buttons
+                const SizedBox(width: 10),
                 // Add item button
                 IconButton(
                   onPressed: () => _showAddItemDialog(context),
                   icon: const Icon(Icons.add_circle,
-                      color: Colors.white, size: 60), // White icon color
+                      color: Colors.white, size: 60),
                 ),
               ],
             ),
@@ -174,12 +191,51 @@ class _AdminDashboardState extends State<AdminDashboard> {
       onTap: () {
         if (_isEditingMode) {
           _showEditingOptions(context, itemId, itemLabel);
+        } else {
+          // Navigate to specific screens based on item label
+          if (label == "Gallery") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminGallery()),
+            );
+          } else if (label == "Emergency List") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminEmergencyScreen()),
+            );
+          } else if (label == "Weather") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WeatherHome()),
+            );
+          } else if (label == "Announcement") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AdminAnnouncementScreen()),
+            );
+          } else if (label == "Health Tips") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AdminHealthTipsScreen()),
+            );
+          } else if (label == "Complaint Box") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminComplaintField()),
+            );
+          } else if (label == "Event Schedule") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminEventSchedule()),
+            );
+          }
         }
       },
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Main item content
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -195,7 +251,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 child: Image.asset(
                   imagePath,
-                  width: 50, // Standardize icon size
+                  width: 50,
                   height: 60,
                   fit: BoxFit.contain,
                 ),
@@ -212,20 +268,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
             ],
           ),
-          // Conditional minus icon for delete mode
           if (_isDeleteMode)
             Positioned(
               right: 8,
               top: 8,
               child: GestureDetector(
                 onTap: () {
-                  _deleteItem(itemId); // Delete the item
+                  _deleteItem(itemId);
                 },
                 child: const Icon(Icons.remove_circle,
                     color: Colors.red, size: 20),
               ),
             ),
-          // Conditional minus icon for editing mode
           if (_isEditingMode)
             const Positioned(
               right: 8,
@@ -269,22 +323,75 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  void _editItem(String itemId, String newLabel, BuildContext context) {
+  void _editItem(String itemId, String newLabel, BuildContext context) async {
     if (newLabel.isNotEmpty) {
-      _dashboardItems.doc(itemId).update({
-        'label': newLabel,
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Item updated to "$newLabel"!')),
-      );
+      try {
+        // Update item for the admin
+        await _dashboardItems.doc(itemId).update({
+          'label': newLabel,
+        });
+
+        // Now, update all users' dashboard items
+        var usersCollection = FirebaseFirestore.instance.collection('users');
+
+        var usersSnapshot = await usersCollection.get();
+        for (var userDoc in usersSnapshot.docs) {
+          var userItems = List.from(userDoc['dashboard_items'] ?? []);
+
+          for (var item in userItems) {
+            if (item['itemId'] == itemId) {
+              item['label'] = newLabel; // Update the label of the item
+              break;
+            }
+          }
+
+          // Update the user's document with the modified dashboard_items
+          await usersCollection.doc(userDoc.id).update({
+            'dashboard_items': userItems,
+          });
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Item updated to "$newLabel"!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error updating item: $e')),
+        );
+      }
     }
   }
 
-  void _deleteItem(String itemId) {
-    _dashboardItems.doc(itemId).delete(); // Delete the item from Firestore
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Item deleted!')),
-    );
+  void _deleteItem(String itemId) async {
+    try {
+      // First, delete the item from the admin's dashboard
+      await _dashboardItems.doc(itemId).delete();
+
+      // Then, remove the item from all users' dashboard_items
+      var usersCollection = FirebaseFirestore.instance.collection('users');
+
+      var usersSnapshot = await usersCollection.get();
+      for (var userDoc in usersSnapshot.docs) {
+        var userItems = List.from(userDoc['dashboard_items'] ?? []);
+
+        // Remove the item with the given itemId
+        userItems.removeWhere((item) => item['itemId'] == itemId);
+
+        // Update the user's dashboard_items field
+        await usersCollection.doc(userDoc.id).update({
+          'dashboard_items': userItems,
+        });
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Item deleted from both admin and user dashboards!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting item: $e')),
+      );
+    }
   }
 
   // Show add item dialog
@@ -329,21 +436,68 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  void _addItem(String label, String iconPath, BuildContext context) {
-    if (label.isNotEmpty && iconPath.isNotEmpty) {
-      _dashboardItems.add({
-        'label': label,
-        'iconPath': iconPath,
-      });
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      );
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Item "$label" added!')),
+        SnackBar(content: Text('Error logging out: $e')),
       );
     }
   }
-}
 
-void main() {
-  runApp(const MaterialApp(
-    home: AdminDashboard(),
-  ));
+  void _addItem(String label, String iconPath, BuildContext context) async {
+    if (label.isNotEmpty && iconPath.isNotEmpty) {
+      setState(() {});
+      try {
+        // Add item to the dashboard_items collection (Admin's view)
+        var itemRef = await _dashboardItems.add({
+          'label': label,
+          'iconPath': iconPath,
+        });
+
+        // Assuming there's a 'users' collection where each user has a 'dashboard_items' field
+        var usersCollection = FirebaseFirestore.instance.collection('users');
+
+        // Fetch all users and update their dashboard_items field
+        var usersSnapshot = await usersCollection.get();
+        for (var userDoc in usersSnapshot.docs) {
+          // Get the user's existing dashboard items (if any)
+          var userItems = List.from(userDoc['dashboard_items'] ?? []);
+
+          // Add the new item reference to their dashboard_items
+          userItems.add({
+            'itemId': itemRef.id, // Add the ID for the new item
+            'label': label,
+            'iconPath': iconPath,
+          });
+
+          // Update the user's document
+          await usersCollection.doc(userDoc.id).update({
+            'dashboard_items': userItems,
+          });
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Item "$label" added to both admin and user dashboards!')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error adding item: $e')),
+        );
+      } finally {
+        setState(() {});
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both label and icon path!')),
+      );
+    }
+  }
 }
